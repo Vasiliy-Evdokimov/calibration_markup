@@ -1,11 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 
-#include "opencv2/opencv.hpp"
-#include "opencv2/objdetect/objdetect.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/calib3d/calib3d.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 
 #include "defines.hpp"
 #include "log.hpp"
@@ -15,9 +14,26 @@
 using namespace std;
 
 const string CALIBRATION_WND_NAME = "Calibration editor";
+const string camera_address_filename = "calibration_markup.cfg";
+string camera_address = "";
 
 int main()
 {
+	string camera_address_file_path =
+		get_work_directory() +	camera_address_filename;
+	write_log("camera_address_file_path = " + camera_address_file_path);
+	//
+	std::ifstream file(camera_address_file_path);
+	if (!file) {
+		write_log("camera_address file open error!");
+		return 1;
+	}
+	//
+	file >> camera_address;
+	//
+	file.close();
+	write_log("camera_address loaded successfully!");
+
 	cv::VideoCapture capture;
 
 	cv::Mat frame;
@@ -29,8 +45,6 @@ int main()
 	read_config();
 
 	read_calibration();
-
-	string camera_address(config.CAM_ADDR_2);
 
 	capture.open(camera_address);
 
@@ -59,9 +73,11 @@ int main()
 		int key = cv::waitKey(1);
 		if (key != -1)
 		{
-			write_log(to_string(key));
+			write_log("key = " + to_string(key));
 			toggle_key(key);
 		}
+		if (key == 27)
+			break;
 
 	}
 
