@@ -53,22 +53,34 @@ int main()
 
 	while (1) {
 
-		capture.read(frame);
+		if (capture.read(frame)) {
 
-		try
-		{
-			undistort(frame, calibration_img, cameraMatrix, distCoeffs);
+			try
+			{
+				undistort(frame, calibration_img, cameraMatrix, distCoeffs);
+			}
+			catch (...)
+			{
+				write_log("Undistortion error!");
+				continue;
+			}
+
+			if (!(calibration_img.empty()))
+				calibration(calibration_img);
+
+			cv::imshow(CALIBRATION_WND_NAME, calibration_img);
+		
 		}
-		catch (...)
+		else 
 		{
-			write_log("Undistortion error!");
+			if (capture.isOpened())
+				capture.release();
+
+			capture.open(camera_address);
+
 			continue;
+
 		}
-
-		if (!(calibration_img.empty()))
-			calibration(calibration_img);
-
-		cv::imshow(CALIBRATION_WND_NAME, calibration_img);
 
 		int key = cv::waitKey(1);
 		if (key != -1)
