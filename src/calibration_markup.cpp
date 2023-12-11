@@ -8,12 +8,12 @@
 
 #include "defines.hpp"
 #include "log.hpp"
-#include "config.hpp"
+#include "config_path.hpp"
 #include "calibration.hpp"
 
 using namespace std;
 
-const string CALIBRATION_WND_NAME = "Calibration editor";
+const string CALIBRATION_WND_NAME = "Standalone calibration editor";
 const string camera_address_filename = "calibration_markup.cfg";
 string camera_address = "";
 
@@ -41,8 +41,6 @@ int main()
 
 	namedWindow(CALIBRATION_WND_NAME);
 	setMouseCallback(CALIBRATION_WND_NAME, onMouse, &calibration_img);
-
-	read_config();
 
 	read_calibration();
 
