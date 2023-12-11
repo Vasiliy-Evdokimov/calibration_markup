@@ -19,6 +19,8 @@ string camera_address = "";
 
 int main()
 {
+	write_log("OpenCV: " + cv::getBuildInformation());
+	//
 	string camera_address_file_path =
 		get_work_directory() + camera_address_filename;
 	write_log("camera_address_file_path = " + camera_address_file_path);
