@@ -20,7 +20,7 @@ string camera_address = "";
 int main()
 {
 	string camera_address_file_path =
-		get_work_directory() +	camera_address_filename;
+		get_work_directory() + camera_address_filename;
 	write_log("camera_address_file_path = " + camera_address_file_path);
 	//
 	std::ifstream file(camera_address_file_path);
