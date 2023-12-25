@@ -17,6 +17,8 @@ const string CALIBRATION_WND_NAME = "Standalone calibration editor";
 const string camera_address_filename = "calibration_markup.cfg";
 string camera_address = "";
 
+//#define UNDISTORT
+
 int main()
 {
 	write_log("OpenCV: " + cv::getBuildInformation());
@@ -57,7 +59,11 @@ int main()
 
 			try
 			{
-				undistort(frame, calibration_img, cameraMatrix, distCoeffs);
+				#ifdef UNDISTORT
+					undistort(frame, calibration_img, cameraMatrix, distCoeffs);
+				#else
+					calibration_img = frame.clone();
+				#endif
 			}
 			catch (...)
 			{
